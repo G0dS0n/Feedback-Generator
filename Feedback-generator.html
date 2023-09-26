@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Random String Display from Google Sheets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button id="randomButton" onclick="displayRandomString()">Display Random String</button>
+    <p id="output"></p>
+
+    <script>
+        let stringsArray = [];
+
+        // Your Google Sheet CSV URL
+        const GOOGLE_SHEET_URL = 'https://api.allorigins.win/raw?url=https://docs.google.com/spreadsheets/d/e/2PACX-1vQhHFWNrnza9uyyiV7y1Q-rgh8tNnhdduI8ogxumKziNBp8YQsopahLnsqxr0_v85fexOHApLYw3f_2/pub?output=csv';
+
+fetch(GOOGLE_SHEET_URL)
+    .then(response => response.text())
+    .then(data => {
+        stringsArray = data.split("\n");
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+
+        function displayRandomString() {
+            if (stringsArray.length === 0) {
+                document.getElementById("output").innerText = "No strings available!";
+                return;
+            }
+            const randomIndex = Math.floor(Math.random() * stringsArray.length);
+            const randomString = stringsArray[randomIndex];
+            document.getElementById("output").innerText = randomString;
+            document.getElementById("randomButton").disabled = true;
+        }
+    </script>
+</body>
+</html>
